@@ -63,16 +63,14 @@ function cacheFunction(cb) {
   */
  let cache = {};
  return function(arg) {
-  let n = arg;
-  if (n in cache) {
+  if (arg in cache) {
     console.log('Buscando en el cache');
-    return cache[n];
+    return cache[arg]; //Fundamental usar brackets notation y no dot notacion
   }
   else {
     console.log('Calculando resultado');
-    let result = cb(n);
-    cache[n] = result;
-    return result;
+    cache[arg] = cb(arg);
+    return cache[arg];
   }
  }
 }
@@ -110,25 +108,25 @@ function getNombre() {
   pero retornen el nombre del instructor y del alumno, respectivamente.
 */
 
-let getNombreInstructor;
-let getNombreAlumno;
+let getNombreInstructor = getNombre.bind(instructor);
+let getNombreAlumno = getNombre.bind(alumno);
 
 /*
   Ejercicio 4
   
   Sin modificar la función crearCadena, usar bind para guardar, en las tres variables declaradas a continuación,
   tres funciones que retornen una cadena (string) y el delimitador especificado (asteriscos, guiones, y guiones bajos,
-    respectivamente). Las funciones obtenidas deberían recibir solamente un argumento - la cadena de texto - ya que los otros
-    argumentos habrán sido "bindeados". 
+  respectivamente). Las funciones obtenidas deberían recibir solamente un argumento - la cadena de texto - ya que los otros
+  argumentos habrán sido "bindeados". 
 */
 
 function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena) {
   return delimitadorIzquierda + cadena + delimitadorDerecha;
 }
 
-let textoAsteriscos;
-let textoGuiones;
-let textoUnderscore;
+let textoAsteriscos = crearCadena.bind(this, "*", "*");
+let textoGuiones = crearCadena.bind(this, "-", "-");
+let textoUnderscore = crearCadena.bind(this, "_", "_");
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
