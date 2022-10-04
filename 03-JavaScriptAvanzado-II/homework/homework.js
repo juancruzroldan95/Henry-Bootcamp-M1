@@ -65,7 +65,7 @@ function cacheFunction(cb) {
  return function(arg) {
   if (arg in cache) {
     console.log('Buscando en el cache');
-    return cache[arg]; //Fundamental usar brackets notation y no dot notacion
+    return cache[arg]; //Hay que usar bracket notation porque no sabemos qué puede ser arg, JS parsea a string al usar bracket notation
   }
   else {
     console.log('Calculando resultado');
