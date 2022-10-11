@@ -25,11 +25,12 @@ class LinkedList {
 
   add(data) {
     let newNode = new Node(data);
-    if(this.head === null)
+    let pointerAux = this.head;
+
+    if(!pointerAux)
       this.head = newNode;
     else {
-      let pointerAux = this.head;
-      while(pointerAux.next !== null)
+      while(pointerAux.next)
         pointerAux = pointerAux.next;
       pointerAux.next = newNode;
     }
@@ -57,7 +58,7 @@ class LinkedList {
 
   search(parameter) {
     let pointerAux = this.head;
-    while(pointerAux !== null){
+    while(pointerAux){
       if((typeof parameter) !== 'function') {
         if(pointerAux.value === parameter)
           return pointerAux.value;
@@ -119,8 +120,11 @@ con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se alma
 
 class HashTable {
   constructor() {
-    this.table = new Array(35);
-    this.size = 0;// elements stored
+    this.numBuckets = 35;
+    this.table = [];
+    
+    for (let i = 0; i < this.numBuckets; i ++)
+      this.table.push({});
   }
 
   hash(key) {
@@ -128,70 +132,32 @@ class HashTable {
     for (let i = 0; i < key.length; i++){
       hash += key.charCodeAt(i);
     }
-    return hash % this.table.length;
+    return hash % this.numBuckets;
   }
 
   set(key, value) {
-    if((typeof key) !== 'string') {
-      throw new TypeError("Keys must be strings");
-    }
-
-    const index = this.hash(key);
-    if (this.table[index]) {
-      for (let i = 0; i < this.table[index].length; i++) {
-        if (this.table[index][i][0] === key) {
-          this.table[index][i][1] = value;
-          return;
-        }
-      }
-      this.table[index].push([key, value]);
-    } else {
-      this.table[index] = [];
-      this.table[index].push([key, value]);
-    }
-    this.size++;
+    if(typeof key !== 'string') throw new TypeError("Keys must be strings");
+    let index = this.hash(key);
+    this.table[index][key] = value;
   }
 
   get(key) {
-    const target = this.hash(key);
-    if (this.table[target]) {
-      for (let i = 0; i < this.table.length; i++) {
-        if (this.table[target][i][0] === key) {
-          return this.table[target][i][1];
-        }
-      }
-    }
-    return undefined;
+    let index = this.hash(key);
+    return this.table[index][key];
   }
 
   hasKey(key) {
-    const index = this.hash(key);
-    if (this.table[index]) {
-      for (let i = 0; i < this.table[index].length; i++) {
-        if (this.table[index][i][0] === key) {
-          return true;
-        }
-        else
-          return false;
-      }
-    }
-    else
-      return false;
+    let checkKey = this.get(key);
+    if (checkKey) return true;
+    else return false;
   }
 }
 
-const ht = new HashTable();
-
-ht.set("Canada", 300);
-ht.set("France", 100);
-ht.set("foobar", 110);
-
-
-console.log(ht.get("Canada"));
-console.log(ht.get("France"));
-console.log(ht.get("foobar"));
-
-ht.hasKey("raboof");
+let hashTable = new HashTable();
+hashTable.set('foobar', 'fluf cats');
+hashTable.get('foobar');
+hashTable.hasKey('foobar');
+hashTable.hasKey('raboof');
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
