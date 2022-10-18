@@ -1,5 +1,7 @@
 'use strict'
 
+const { arrayReplaceAt } = require("markdown-it/lib/common/utils");
+
 /* LISTAS ENLAZDAS */
 
 function Lista(){
@@ -14,11 +16,11 @@ function Nodo(data) {
 
 Lista.prototype.push = function(data) { // Insert Last
 	var newNodo = new Nodo(data);
-	if (this.point == null) {
+	if (this.point === null) {
 		this.point = newNodo;
 	} else {
-		pointer = this.point;
-		while (pointer.next!=null) {
+		let pointer = this.point;
+		while (pointer.next !== null) {
 			pointer = pointer.next;
 		}
 		pointer.next = newNodo;
@@ -82,7 +84,7 @@ Lista.prototype.deleteFirst = function() {
 
 Lista.prototype.deleteLast = function() {	
 	pointer = this.point;
-	while (pointer.next.next!=null) {
+	while (pointer.next.next !== null) {
 		pointer = pointer.next;
 	}
 	pointer.next = null;
