@@ -1,3 +1,4 @@
+const { queue } = require('@11ty/eleventy-cache-assets');
 const {
     Queue,
     Node,
@@ -16,7 +17,16 @@ const {
 
 var countArray = function(array) {
     // Tu código aca:
-    
+    let suma = 0;
+    for (let i = 0; i < array.length; i++) {
+        if (Array.isArray(array[i])) {
+            suma += countArray(array[i]);
+        }
+        else {
+            suma += array[i];
+        }
+    }
+    return suma;
 }
 
 
@@ -39,9 +49,15 @@ var countArray = function(array) {
 
 var countProps = function(obj) {
     // Tu código aca:
-
+    let count = 0;
+    for (let key in obj) {
+        count++;
+        if (typeof(obj[key]) === 'object' && !Array.isArray(obj[key])) {
+            count += countProps(obj[key]);
+        }
+    }
+    return count;
 }
-
 
 // Implementar el método changeNotNumbers dentro del prototype de LinkedList que deberá cambiar
 // aquellos valores que no puedan castearse a numeros por 'Kiricocho' y devolver la cantidad de cambios que hizo
@@ -53,7 +69,17 @@ var countProps = function(obj) {
 
 LinkedList.prototype.changeNotNumbers = function(){
     // Tu código aca:
-
+    if (this.len === 0) return console.log('Es una lista vacia');
+	let pointer = this.head;
+    let changes = 0;
+    while (pointer) {
+        if (isNaN(pointer.value)) {
+            pointer.value = "Kiricocho";
+            changes++;
+        }
+        pointer = pointer.next;
+    }
+    return changes;
 }
 
 
@@ -67,9 +93,29 @@ LinkedList.prototype.changeNotNumbers = function(){
 
 var mergeQueues = function(queueOne, queueTwo) {
     // Tu código aca:
-
+    let mergedQueue = new Queue;
+    let i = 0;
+    let j = 0;
+    while (i < queueOne.size() && j < queueTwo.size()) {
+        if (i <= j) {
+            mergedQueue.enqueue(queueOne.array[i]);
+            i++;
+        }
+        else {
+            mergedQueue.enqueue(queueTwo.array[j]);
+            j++;
+        }
+    }
+    while (!(i === queueOne.size())) {
+        mergedQueue.enqueue(queueOne.array[i]);
+        i++;
+    }
+    while (!(j === queueTwo.size())) {
+        mergedQueue.enqueue(queueTwo.array[j]);
+        j++;
+    } 
+    return mergedQueue;
 }
-
 
 // Implementar la funcion closureMult que permita generar nuevas funciones que representen
 // las tablas de multiplicación de distintos numeros
@@ -82,14 +128,20 @@ var mergeQueues = function(queueOne, queueTwo) {
 
 var closureMult = function(multiplier) {
     // Tu código aca:
-
+    return function(num) {
+        return multiplier * num;
+    }
 }
 
 // Implementar el método sum dentro del prototype de BinarySearchTree
 // que debe retornar la suma total de los valores dentro de cada nodo del arbol
 BinarySearchTree.prototype.sum = function() {
     // Tu código aca:
-
+    let summation = 0;
+    if (this.left) summation += this.left.sum();
+    if (this.right) summation += this.right.sum();
+    summation += this.value;
+    return summation;
 }
 
 module.exports = {
